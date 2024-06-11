@@ -7,7 +7,7 @@ resource "aws_instance" "web1" {
     instance_type          = var.instance_type
     key_name               = var.key_name
     ami                    = var.ami
-    vpc_security_group_ids = [aws_security_group.public_sg.id]
+    vpc_security_group_ids = [aws_security_group.web-sg.id]
     subnet_id              = aws_subnet.public.id
     availability_zone      = var.availability_zone
 

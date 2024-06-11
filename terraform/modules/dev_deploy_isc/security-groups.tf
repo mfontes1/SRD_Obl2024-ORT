@@ -1,4 +1,4 @@
-resource "aws_security_group" "web-SG" {
+resource "aws_security_group" "web-sg" {
   name   = var.sg_name
   vpc_id = aws_vpc.vpc_obligatorio.id 
   ingress {
