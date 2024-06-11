@@ -1,0 +1,61 @@
+resource "aws_wafv2_web_acl" "example" {
+  name        = "example"
+  description = "An example WAFv2 ACL"
+  scope       = "REGIONAL" # Set to "CLOUDFRONT" if used with CloudFront
+  default_action {
+    allow {}
+  }
+
+  rule {
+    name     = "BlockBadBots"
+    priority = 1
+    action {
+      block {}
+    }
+    statement {
+      byte_match_statement {
+        search_string = "badbot"
+        field_to_match {
+          single_header {
+            name = "User-Agent"
+          }
+        }
+        text_transformation {
+          priority = 0
+          type     = "NONE"
+        }
+        positional_constraint = "CONTAINS"
+      }
+    }
+    visibility_config {
+      sampled_requests_enabled = true
+      cloudwatch_metrics_enabled = true
+      metric_name = "BlockBadBots"
+    }
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "example"
+    sampled_requests_enabled   = true
+  }
+}
+
+resource "aws_wafv2_web_acl_association" "example" {
+  resource_arn = aws_lb.example.arn
+  web_acl_arn  = aws_wafv2_web_acl.example.arn
+}
+
+resource "aws_lb" "example" {
+  name               = "example-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.example.id]
+  subnets            = [aws_subnet.example.id]
+
+  enable_deletion_protection = false
+
+  tags = {
+    Name = "example-lb"
+  }
+}

@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install python3 for Ansible
+      apt:
+        name: python3
+        state: present
+
+    - name: Install LAMP stack
+      apt:
+        name:
+          - apache2
+          - mariadb-server
+          - php
+          - libapache2-mod-php
+          - php-mysql
+        state: present
