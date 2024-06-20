@@ -21,7 +21,7 @@ resource "aws_instance" "web1" {
     connection {
       type = "ssh"
       user = "admin"
-      private_key = file("C:/Users/ricar/OneDrive - Facultad de Ingenieria - Universidad ORT Uruguay/ORT/Seguridad en redes y datos/Obligatorio 2024/labsuser.pem")
+      private_key = file("C:/Users/ricar/labsuser.pem")
       host = self.public_ip
     }
   }
@@ -32,7 +32,7 @@ resource "aws_instance" "web1" {
     connection {
       type        = "ssh"
       user        = "admin"
-      private_key = file("/Users/marcio/Documents/ORT/SRD/labsuser.pem")
+      private_key = file("C:/Users/ricar/labsuser.pem")
       host        = self.public_ip
     }
   }
@@ -52,7 +52,7 @@ resource "aws_instance" "web1" {
   connection {
       type = "ssh"
       user = "admin"
-      private_key = file("/Users/marcio/Documents/ORT/SRD/labsuser.pem")
+      private_key = file("C:/Users/ricar/labsuser.pem")
       host = self.public_ip
     }
 }  
