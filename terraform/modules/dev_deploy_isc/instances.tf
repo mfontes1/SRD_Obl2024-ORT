@@ -21,7 +21,7 @@ resource "aws_instance" "web1" {
     connection {
       type = "ssh"
       user = "admin"
-      private_key = file("C:/Users/ricar/labsuser.pem")
+      private_key = file("/home/rrobledo/labsuser.pem")
       host = self.public_ip
     }
   }
@@ -32,7 +32,7 @@ resource "aws_instance" "web1" {
     connection {
       type        = "ssh"
       user        = "admin"
-      private_key = file("C:/Users/ricar/labsuser.pem")
+      private_key = file("/home/rrobledo/labsuser.pem")
       host        = self.public_ip
     }
   }
@@ -52,7 +52,7 @@ resource "aws_instance" "web1" {
   connection {
       type = "ssh"
       user = "admin"
-      private_key = file("C:/Users/ricar/labsuser.pem")
+      private_key = file("/home/rrobledo/labsuser.pem")
       host = self.public_ip
     }
 }  
