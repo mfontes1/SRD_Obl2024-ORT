@@ -2,6 +2,7 @@
 
 
 # Se crean las instancias web1, DB y WAF
+# Ajustar el path a la sshkey.pem segun el usuario que lo este ejecutando.
 
 resource "aws_instance" "web1" {
     instance_type          = var.instance_type
@@ -11,20 +12,17 @@ resource "aws_instance" "web1" {
     subnet_id              = aws_subnet.public.id
     availability_zone      = var.availability_zone
 
+#    provisioner "file" {
+#    source      = "playbook.yml"
+#    destination = "/home/admin/playbook.yml"
 
-
-#verificar que el path de labsuser.pem coincida con el usuario que lo este ejecutando.
-    provisioner "file" {
-    source      = "playbook.yml"
-    destination = "/home/admin/playbook.yml"
-
-    connection {
-      type = "ssh"
-      user = "admin"
-      private_key = file("/Users/marcio/Documents/ORT/SRD/labsuser.pem")
-      host = self.public_ip
-    }
-  }
+#    connection {
+#      type = "ssh"
+#      user = "admin"
+#      private_key = file("/Users/marcio/Documents/ORT/SRD/labsuser.pem")
+#      host = self.public_ip
+#    }
+#  }
    provisioner "file" {
     source      = "inventory"
     destination = "/home/admin/inventory"
