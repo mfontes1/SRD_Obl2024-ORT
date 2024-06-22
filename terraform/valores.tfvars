@@ -2,7 +2,11 @@
 region = "us-east-1"
 profile = "default"
 instance_type_input = "t2.micro"
+<<<<<<< HEAD
 ami_input = "ami-058bd2d568351da34" # Debian 12 AMI
+=======
+ami_input = "ami-058bd2d568351da34" # Debian 11 AMI
+>>>>>>> origin/main
 key_name_input = "vockey"
 name_instance_input = "Servidor-web1-parametrizado"
 name_instance2_input = "Servidor-web2-parametrizado"

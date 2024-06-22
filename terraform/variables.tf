@@ -43,6 +43,10 @@ variable "availability_zone" {
     type = string
   
 }
+variable "availability_zone2" {
+  description = "The availability zone for the subnets."
+  default     = "us-east-1b"
+}
 
 variable "sg_name_input" {
     type = string

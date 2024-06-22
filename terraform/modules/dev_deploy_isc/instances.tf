@@ -11,20 +11,31 @@ resource "aws_instance" "web1" {
     subnet_id              = aws_subnet.public.id
     availability_zone      = var.availability_zone
 
+    user_data = <<-EOF
+              #!/bin/bash
+              apt-get update -y
 
+              # Install necessary packages
+              apt-get install -y wget
 
-#verificar que el path de labsuser.pem coincida con el usuario que lo este ejecutando.
-    provisioner "file" {
-    source      = "playbook.yml"
-    destination = "/home/admin/playbook.yml"
+              # Download and extract WordPress
+              curl -O https://wordpress.org/latest.tar.gz
+              tar -xzvf latest.tar.gz
+              rsync -av wordpress/* /var/www/html/
 
-    connection {
-      type = "ssh"
-      user = "admin"
-      private_key = file("/home/rrobledo/labsuser.pem")
-      host = self.public_ip
-    }
-  }
+              # Set ownership and permissions
+              chown -R www-data:www-data /var/www/html/
+              chmod -R 755 /var/www/html/
+
+              # Configure WordPress
+              cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+              sed -i "s/database_name_here/wordpress/" /var/www/html/wp-config.php
+              sed -i "s/username_here/wordpressuser/" /var/www/html/wp-config.php
+              sed -i "s/password_here/password/" /var/www/html/wp-config.php
+
+              systemctl restart apache2
+              EOF
+
    provisioner "file" {
     source      = "inventory"
     destination = "/home/admin/inventory"
@@ -36,18 +47,17 @@ resource "aws_instance" "web1" {
       host        = self.public_ip
     }
   }
-
-  provisioner "remote-exec" {
-  inline = [
-    "sudo apt update -y",
-    "sudo apt install -y ansible git apache2",
-    "git clone https://github.com/mfontes1/ansible-lamp-stack.git",
-    "git clone https://github.com/mfontes1/ansible-debian-11-hardening.git",
-    "echo '<h1>Server Details</h1><p><strong>Hostname:</strong> $(hostname)</p><p><strong>IP Address:</strong> $(hostname -I | cut -d\" \" -f1)</p>' | sudo tee /var/www/html/index.html",
-    "sudo systemctl restart apache2",
-    "sudo ansible-playbook -i /home/admin/inventory /home/admin/ansible-lamp-stack/lamp-playbook.yml",
-    "sudo ansible-playbook -i /home/admin/inventory /home/admin/ansible-debian-11-hardening/site.yml"
-  ]
+    
+    provisioner "remote-exec" {
+      inline = [
+        "sudo apt update -y",
+        "sudo apt install -y ansible git",
+        "git clone https://github.com/mfontes1/ansible-lamp-stack.git",
+        "git clone https://github.com/mfontes1/ansible-debian-11-hardening.git",
+  #      "sudo ansible-playbook -i /home/admin/inventory /home/admin/playbook.yml",
+        "sudo ansible-playbook -i /home/admin/inventory /home/admin/ansible-lamp-stack/lamp-playbook.yml",
+  #      "sudo ansible-playbook -i /home/admin/inventory /home/admin/ansible-debian-11-hardening/site.yml"
+    ]
       
   connection {
       type = "ssh"
@@ -68,7 +78,7 @@ tags = {
 resource "aws_db_subnet_group" "main" {
   name       = var.db_subnet_group_name
   subnet_ids = [
-    aws_subnet.private.id, aws_subnet.public.id
+    aws_subnet.private.id, aws_subnet.private2.id
     ]
 
   tags = {
