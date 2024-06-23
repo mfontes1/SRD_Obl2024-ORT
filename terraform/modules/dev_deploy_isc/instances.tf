@@ -12,17 +12,6 @@ resource "aws_instance" "web1" {
     subnet_id              = aws_subnet.public.id
     availability_zone      = var.availability_zone
 
-#    provisioner "file" {
-#    source      = "playbook.yml"
-#    destination = "/home/admin/playbook.yml"
-
-#    connection {
-#      type = "ssh"
-#      user = "admin"
-#      private_key = file("/Users/marcio/Documents/ORT/SRD/labsuser.pem")
-#      host = self.public_ip
-#    }
-#  }
    provisioner "file" {
     source      = "inventory"
     destination = "/home/admin/inventory"
@@ -43,7 +32,7 @@ resource "aws_instance" "web1" {
         "git clone https://github.com/mfontes1/ansible-debian-11-hardening.git",
   #      "sudo ansible-playbook -i /home/admin/inventory /home/admin/playbook.yml",
         "sudo ansible-playbook -i /home/admin/inventory /home/admin/ansible-lamp-stack/lamp-playbook.yml",
-  #      "sudo ansible-playbook -i /home/admin/inventory /home/admin/ansible-debian-11-hardening/site.yml"
+        "sudo ansible-playbook -i /home/admin/inventory /home/admin/ansible-debian-11-hardening/site.yml"
     ]
       
   connection {
