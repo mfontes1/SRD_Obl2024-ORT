@@ -9,7 +9,7 @@ resource "aws_vpc" "vpc_obligatorio" {
 }
 
 resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.vpc_obligatorio.id 
+  vpc_id                  = aws_vpc.vpc_obligatorio.id
   availability_zone       = var.availability_zone
   cidr_block              = var.public_subnet_cidr
   map_public_ip_on_launch = true
@@ -19,7 +19,7 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "private" {
-  vpc_id                  = aws_vpc.vpc_obligatorio.id 
+  vpc_id                  = aws_vpc.vpc_obligatorio.id
   availability_zone       = var.availability_zone
   cidr_block              = var.private_subnet_cidr
   map_public_ip_on_launch = false
@@ -29,7 +29,7 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_subnet" "public2" {
-  vpc_id                  = aws_vpc.vpc_obligatorio.id 
+  vpc_id                  = aws_vpc.vpc_obligatorio.id
   availability_zone       = var.availability_zone2
   cidr_block              = var.public_subnet_cidr2
   map_public_ip_on_launch = true
@@ -39,7 +39,7 @@ resource "aws_subnet" "public2" {
 }
 
 resource "aws_subnet" "private2" {
-  vpc_id                  = aws_vpc.vpc_obligatorio.id 
+  vpc_id                  = aws_vpc.vpc_obligatorio.id
   availability_zone       = var.availability_zone2
   cidr_block              = var.private_subnet_cidr2
   map_public_ip_on_launch = false
@@ -57,7 +57,7 @@ resource "aws_internet_gateway" "main" {
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.vpc_obligatorio.id 
+  vpc_id = aws_vpc.vpc_obligatorio.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -81,7 +81,6 @@ resource "aws_route_table_association" "public2" {
 
 resource "aws_eip" "nat1" {
   associate_with_private_ip = true
-
   tags = {
     Name = "main-eip1"
   }
@@ -98,7 +97,6 @@ resource "aws_nat_gateway" "main1" {
 
 resource "aws_eip" "nat2" {
   associate_with_private_ip = true
-
   tags = {
     Name = "main-eip2"
   }
